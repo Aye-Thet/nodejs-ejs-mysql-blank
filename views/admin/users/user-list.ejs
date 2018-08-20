@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title><%=title%></title>
+  </head>
+  <style media="screen">
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  table, th, td {
+    border: 1px solid black;
+  }
+  </style>
+  <body>
+
+    <h1><%=title%></h1>
+    <form action="/admin/users/list" method="post">
+      <input type="search" name="keyword" value="<%= search.keyword || '' %>">
+      <input type="submit" name="" value="Search">
+    </form>
+    <br>
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Updated</th>
+        </tr>
+      </thead>
+      <tbody>
+
+          <% for(var i = 0; i < users.length; i++) { %>
+            <tr>
+            <td><%= i+1 %></td>
+            <td><%= users[i].name %></td>
+            <td><%= users[i].email %></td>
+            <td><%= users[i].role %></td>
+            <td><%= users[i].updated %></td>
+            </tr>
+        <% } %>
+
+      </tbody>
+    </table>
+
+  </body>
+</html>
