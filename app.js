@@ -43,6 +43,10 @@ app.use(function(req, res, next) {
 
 app.use('/', indexRouter);
 app.use(function(req, res, next){
+  // TODO need to delete - for test : set session
+  req.session.user = {
+    uid: 31,name: 'Admin',email: 'help@atutu.com', role: 'ADMIN'
+  };
   if(req.session.user){
     next();
   }else{

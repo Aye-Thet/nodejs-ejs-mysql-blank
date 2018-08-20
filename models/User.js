@@ -3,7 +3,7 @@ var bcrypt = require('bcrypt-nodejs');
 
 var User = {
   add: function(params, callback){
-    var sql = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
+    var sql = 'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)';
     params[2] = bcrypt.hashSync(params[2], bcrypt.genSaltSync(8), null);
     return db.query(sql, params, callback);
   },
