@@ -44,7 +44,7 @@
           <% for(var i = 0; i < users.length; i++) { %>
             <tr>
             <td><%= i+1 %></td>
-            <td><%= users[i].name %></td>
+            <td> <a href="/admin/users/view/<%= users[i].uid %>"> <%= users[i].name %></a></td>
             <td><%= users[i].email %></td>
             <td><%= users[i].role %></td>
             <td><%= users[i].updated %></td>
