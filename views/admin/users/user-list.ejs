@@ -17,7 +17,12 @@
   <body>
 
     <h1><%=title%></h1>
-    <form action="/admin/users/list" method="post">
+    <form action="/admin/users/list" id="frm" method="post">
+      <select name="role">
+        <option value="">All</option>
+        <option value="Admin">ADMIN</option>
+        <option value="User">USER</option>
+      </select>
       <input type="search" name="keyword" value="<%= search.keyword || '' %>">
       <input type="submit" name="" value="Search">
     </form>
@@ -46,6 +51,10 @@
 
       </tbody>
     </table>
-
   </body>
+  <script type="text/javascript">
+    <% if (search.role) { %>
+      frm.role.value = '<%= search.role %>'
+    <% } %>
+  </script>
 </html>
