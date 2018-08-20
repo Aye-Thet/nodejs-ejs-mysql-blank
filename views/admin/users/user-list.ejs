@@ -38,7 +38,9 @@
         </tr>
       </thead>
       <tbody>
-
+          <% if(users.length == 0) { %>
+            <td colspan="5">Data not Found!</td>
+          <% } %>
           <% for(var i = 0; i < users.length; i++) { %>
             <tr>
             <td><%= i+1 %></td>
