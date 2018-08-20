@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title><%=title%></title>
-  </head>
-  <body>
-    <h1><%=title%></h1>
-    Name: <%= user.name %> <br>
-    Email: <%= user.email %> <br>
-    Role: <%= user.role %> <br>
-    Updated: <%= user.updated %> <br>
-    <a href="/admin/users/list">Go List</a>
-  </body>
+ <head>
+   <meta charset="utf-8">
+   <title><%=title%></title>
+ </head>
+ <body>
+   <form name="frm" action="/admin/users/remove" method="post">
+     <input type="hidden" name="uid" value="<%= user.uid %>">
+     <p>Name: <%= user.name %></p>
+     <p>Email: <%= user.email %></p>
+     <p>Role: <%= user.role %></p>
+     <p>Updated: <%= user.updated %></p>
+     <a href="/admin/users/list">Go to list</a>
+     <a href="/admin/users/modify/<%=user.uid%>">Modify</a>
+     <a href="javascript:del()">Remove</a>
+   </form>
+ </body>
+ <script type="text/javascript">
+   function del(){
+     if(confirm('Are you sure?')){
+       frm.submit();
+     }
+   }
+ </script>
 </html>

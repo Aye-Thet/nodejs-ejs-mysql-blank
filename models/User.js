@@ -15,6 +15,15 @@ var User = {
     var sql = "SELECT uid, name,role, email, DATE_FORMAT(updated, '%d/%m/%Y %H:%i')AS updated FROM users WHERE uid = ?";
     return db.query(sql, [uid], callback);
   },
+  update: function(params, callback){
+    var sql = "UPDATE users SET name =?, role =?, updated = NOW() WHERE uid = ?";
+    return db.query(sql, params, callback);
+  },
+  remove: function(uid, callback) {
+    console.log('do');
+    var sql = "DELETE FROM users WHERE uid = ?";
+    return db.query(sql, [uid], callback);
+},
   find: function(params, callback){
     var p = [];
     var sql = "SELECT uid, name,role, email, DATE_FORMAT(updated, '%d/%m/%Y %H:%i')AS updated FROM users";
