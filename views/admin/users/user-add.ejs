@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title><%=title%></title>
+  </head>
+  <body>
+    <h1><%=title%></h1>
+    <form id="adduser" action="/admin/users/add" method="post">
+      Name: <input type="text" name="name" value="" required><p></p>
+      Email: <input type="email" name="email" id="email" value="" required><p></p>
+      Password: <input type="password" name="password" value="" required><p></p>
+      Role: <select class="" name="role" required>
+              <option value="">Select Role</option>
+              <option value="ADMIN">Admin</option>
+              <option value="USER">User</option>
+            </select> <p></p>
+      <input type="submit" name="" id="save" value="SAVE">
+    </form>
+  </body>
+  <script src="/js/jquery.min.js" charset="utf-8"></script>
+  <script src="/js/jquery.validate.js" charset="utf-8"></script>
+  <script type="text/javascript">
+  $(function () {
+    $.validator.addMethod("pwcheck", function(value) {
+      return /^[A-Za-z0-9\d=!\-@._*]*$/.test(value) // consists of only these
+          && /[a-z]/.test(value) // has a lowercase letter
+          && /[A-Z]/.test(value) // has a uppercase letter
+          && /\d/.test(value) // has a digit
+        });
+        $('#adduser').validate({
+            rules: {
+                'password':{
+                    pwcheck: true
+                }
+            },
+            messages: {
+                password: {
+                  pwcheck: "Type in uppercase letters, lowercase letters, and numbers.",
+                }
+            },
+        });
+        $('#save').on('click',function(e){
+          e.preventDefault();
+          $.post(
+            '/dupemail',
+            { email: $('#email').val() }
+          ).done(function(res){
+            if(res.status){
+              alert(res.msg);
+              $('#email').select();
+            }else{
+              $('#adduser').submit();
+            }
+          }).fail(function(err){
+            alert(err.status + ' ' + err.responseText);
+          });
+        });
+        <% if(messages.warn) { %>
+          alert('<%=messages.warn%>');
+        <% } %>
+  });
+  </script>
+</html>

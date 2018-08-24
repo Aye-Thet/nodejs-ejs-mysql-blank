@@ -26,7 +26,7 @@ var User = {
 },
   find: function(params, callback){
     var p = [];
-    var sql = "SELECT uid, name,role, email, DATE_FORMAT(updated, '%d/%m/%Y %H:%i')AS updated FROM users";
+    var sql = "SELECT uid, name, role, email, DATE_FORMAT(updated, '%d/%m/%Y %H:%i')AS updated FROM users";
     if(params[0] != ''|| params[2] != ''){
       sql += " WHERE";
       if(params[0] != ''){
@@ -41,6 +41,8 @@ var User = {
     p.push(params[2]);
   }
 }
+console.log(sql);
+console.log("P", p);
   return db.query(sql, p, callback);
 },
   compare: function(cleartext, encrypted){
