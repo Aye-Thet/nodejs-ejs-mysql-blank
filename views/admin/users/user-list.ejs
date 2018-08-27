@@ -13,17 +13,22 @@
   table, th, td {
     border: 1px solid black;
   }
+  th{
+    cursor: pointer;
+  }
   </style>
   <body>
 
     <h1><%=title%></h1>
     <form action="/admin/users/list" id="frm" method="post">
+      <input type="hidden" name="sortField" id="sortField" value="<%=sort.field%>">
+      <input type="hidden" name="sortOrder" id="sortOrder" value="<%=sort.order%>">
       <select name="role">
         <option value="">All</option>
         <option value="Admin">ADMIN</option>
         <option value="User">USER</option>
       </select>
-      <input type="search" name="keyword" value="<%= search.keyword || '' %>">
+      <input type="search" id="search" name="keyword" value="<%= search.keyword || '' %>">
       <input type="submit" name="" value="Search">
     </form>
     <br>
@@ -31,10 +36,10 @@
       <thead>
         <tr>
           <th>No</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Role</th>
-          <th>Updated</th>
+          <th data-sort="name">Name</th>
+          <th data-sort="email">Email</th>
+          <th data-sort="role">Role</th>
+          <th data-sort="updated">Updated</th>
         </tr>
       </thead>
       <tbody>
@@ -55,9 +60,27 @@
     </table>
     <a href="/admin/users/add">Add User</a>
   </body>
+  <script src="/js/jquery.min.js" charset="utf-8"></script>
   <script type="text/javascript">
-    <% if (search.role) { %>
-      frm.role.value = '<%= search.role %>'
-    <% } %>
+    $(function(){
+      $('th').click(function () {
+        if(!$(this).data('sort')) return false;
+        if( $('#sortField').val() == $(this).data('sort') ){
+            $('#sortOrder').val( ($('#sortOrder').val() == 'ASC' )?'DESC':'ASC');
+        }else{
+          $('#sortOrder').val('ASC');
+        }
+        $('#sortField').val($(this).data('sort'));
+        $('#frm').submit();
+      })
+      $('th[data-sort="<%=sort.field%>"]')
+          .append(' <%= (sort.order == 'ASC')? '\u25B2': '\u25BC' %> ');
+      <% if (search.role) { %>
+        frm.role.value = '<%= search.role %>'
+      <% } %>
+      <% if (messages.info){ %>
+        alert('<%= messages.info %>');
+      <% } %>
+      });
   </script>
 </html>

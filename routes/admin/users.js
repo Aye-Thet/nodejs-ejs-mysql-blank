@@ -5,9 +5,15 @@ var User = require('../../models/User');
 
 router.all('/list', function(req, res, next){
   var params = [req.body.keyword || '', req.body.keyword || '', req.body.role || ''];
-  User.find(params, function(err, users) {
+  var orderby = [req.body.sortField||'updated', req.body.sortOrder||'DESC'];
+  User.find(params, orderby, function(err, users) {
     if (err) next (err);
-    res.render('admin/users/user-list', {title: 'User List', users: users, search:{ keyword: req.body.keyword, role: req.body.role}});
+    res.render('admin/users/user-list', {
+      title: 'User List',
+      users: users,
+      search:{ keyword: req.body.keyword, role: req.body.role},
+      sort: {field:orderby[0], order:orderby[1]}
+    });
   });
 });
 
@@ -61,7 +67,7 @@ router.post('/add', function(req, res, next) {
     } else {
       User.add(params, function(err2, result) {
         if (err2) throw err2;
-        console.log('check id', result);
+        // console.log('check id', result);
         req.flash('warn', 'Insert Success');
         res.redirect('/admin/users/view/'+ result.insertId);
       });
