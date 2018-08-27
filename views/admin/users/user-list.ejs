@@ -48,7 +48,7 @@
           <% } %>
           <% for(var i = 0; i < users.length; i++) { %>
             <tr>
-            <td><%= i+1 %></td>
+            <td><%= (paging.currPage-1)*paging.perPage+i+1 %></td>
             <td> <a href="/admin/users/view/<%= users[i].uid %>"> <%= users[i].name %></a></td>
             <td><%= users[i].email %></td>
             <td><%= users[i].role %></td>
@@ -58,6 +58,13 @@
 
       </tbody>
     </table>
+
+    <%- (paging.prev)? `<a href="/admin/users/list?p=${paging.prev}&ps${paging.perPage}">Prev</a>` : '' %>
+    <% for(page of paging.pages) { %>
+      <%- (page == paging.currPage) ? `[${page}]` : `<a href="/admin/users/list?p=${page}&ps=${paging.perPage}">${page}</a>` %>
+    <% } %>
+    <%- (paging.next)? `<a href="/admin/users/list?p=${paging.next}&ps${paging.perPage}">Next</a>` : '' %>
+    <p></p>
     <a href="/admin/users/add">Add User</a>
   </body>
   <script src="/js/jquery.min.js" charset="utf-8"></script>

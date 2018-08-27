@@ -27,25 +27,41 @@ var User = {
   find: function(params,orderby, callback){
     var p = [];
     var sql = "SELECT uid, name, role, email, DATE_FORMAT(updated, '%d/%m/%Y %H:%i')AS updated FROM users";
-    sql += " ORDER BY "+orderby[0]+" "+orderby[1];
+    var condition = "";
+
     if(params[0] != ''|| params[2] != ''){
-      sql += " WHERE";
+      condition += " WHERE";
       if(params[0] != ''){
-      sql += " ( name LIKE concat('%',?,'%') OR email LIKE concat('%',?,'%') )";
+      condition += " ( name LIKE concat('%',?,'%') OR email LIKE concat('%',?,'%') )";
       p.push(params[0]);
       p.push(params[1]);
-      if(params[2] != '') sql += " AND";
+      if(params[2] != '') condition += " AND";
   }
 
   if(params[2] != ''){
-    sql += " role = ?";
+    condition += " role = ?";
     p.push(params[2]);
   }
 }
 
-console.log(sql);
-console.log("P", p);
-  return db.query(sql, p, callback);
+var sqlCnt = "SELECT COUNT(0) AS cnt FROM users";
+sqlCnt += condition;
+console.log(sqlCnt, p);
+db.query(sqlCnt, p, function(err, rows){ // select count of rows
+  if(err) throw err;
+  console.log('rows', rows);
+  sql += condition;
+  sql += " ORDER BY "+orderby[0]+" "+orderby[1];
+  sql += " LIMIT ? OFFSET ? ";
+  p.push(params[3]);
+  p.push(params[4]);
+  return db.query(sql, p, function(err2, users){ // select data
+    if(err2) throw err2;
+    callback(err2, rows[0].cnt, users);
+  });
+});
+// console.log(sql);
+// console.log("P", p);
 },
   compare: function(cleartext, encrypted){
     return bcrypt.compareSync(cleartext, encrypted);
